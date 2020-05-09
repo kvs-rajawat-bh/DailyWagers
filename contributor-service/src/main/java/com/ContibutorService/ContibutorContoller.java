@@ -29,14 +29,14 @@ public class ContibutorContoller {
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS);
 	
-    private final String spreadsheetId = "1qYTgSAUG4H2nkp7piiPJI0BC5gC7-OMqlHNVQs8KgcQ";
+    private final String spreadsheetId = "1sR8mzuk0f9uSf8GL4AU7niYiDSayDsvF4yVSR98AYF8";
     
     
     @PostMapping("/addDonor")
     public void addDonor(@RequestBody Donor donor) throws GeneralSecurityException, IOException {
     	System.out.println(donor.getName());
     	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-    	final String range = "Sheet1!A1:B3";
+    	final String range = "Copy of Donor!C3:F143";
     	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
