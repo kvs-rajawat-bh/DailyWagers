@@ -66,7 +66,7 @@ public class ContibutorContoller {
 //    	        service.spreadsheets().values().append(spreadsheetId, range, body)
 //    	                .setValueInputOption("RAW")
 //    	                .execute();
-    	
+    	System.out.println(donor.getName());
     	Beneficiary beneficiary = getBeneficiary();
     	System.out.println(env.getProperty("spring.mail.username"));
     	
