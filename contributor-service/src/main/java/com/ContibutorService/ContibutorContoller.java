@@ -48,7 +48,7 @@ public class ContibutorContoller {
     private MailBuilder mailBuilder;
     
 	@PostMapping("/addDonor")
-    public void addDonor(Donor donor) throws GeneralSecurityException, IOException {
+    public void addDonor(@RequestBody Donor donor) throws GeneralSecurityException, IOException {
 //    	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 //    	String range = "Copy of Donor!C3:F143";
 //    	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
