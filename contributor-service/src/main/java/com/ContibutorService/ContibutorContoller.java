@@ -26,6 +26,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.AppendValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 @CrossOrigin("*")
@@ -48,24 +49,26 @@ public class ContibutorContoller {
     
 	@PostMapping("/addDonor")
     public void addDonor(@RequestBody Donor donor) throws GeneralSecurityException, IOException {
-//    	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-//    	String range = "Copy of Donor!C3:F143";
-//    	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
-//                .setApplicationName(APPLICATION_NAME)
-//                .build();
-//    	
-//    	List<List<Object>> values = Arrays.asList(
-//    	        Arrays.asList(
-//    	                donor.getName(),donor.getEmail(),donor.getContact(),donor.getCity()
-//    	        )
-//    	);
-//    	
-//    	ValueRange body = new ValueRange().setValues(values);
-//		AppendValuesResponse result =
-//    	        service.spreadsheets().values().append(spreadsheetId, range, body)
-//    	                .setValueInputOption("RAW")
-//    	                .execute();
-    	System.out.println(donor.getName());
+    	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+    	String range = "Copy of Donor!C1:F143";
+    	
+    	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+ 
+    	ValueRange response = service.spreadsheets().values().get(spreadsheetId, "Copy of Donor!A:F").execute();
+    	List<List<Object>> values = response.getValues();
+    	values = Arrays.asList(
+    	        Arrays.asList(
+    	                "","DL"+values.size(),donor.getName(),donor.getContact(),donor.getEmail(),donor.getCity()
+    	        )
+    	);
+    	
+    	ValueRange body = new ValueRange().setValues(values);
+		AppendValuesResponse result =
+    	        service.spreadsheets().values().append(spreadsheetId, range, body)
+    	                .setValueInputOption("USER_ENTERED")
+    	                .execute();
     	Beneficiary beneficiary = getBeneficiary();
     	System.out.println(env.getProperty("spring.mail.username"));
     	
