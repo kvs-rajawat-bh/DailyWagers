@@ -50,17 +50,18 @@ public class ContibutorContoller {
 	@PostMapping("/addDonor")
     public void addDonor(@RequestBody Donor donor) throws GeneralSecurityException, IOException {
     	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-    	String range = "Copy of Donor!C1:F143";
+    	String range = "Copy of Donor!A:F";
     	
     	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
  
-    	ValueRange response = service.spreadsheets().values().get(spreadsheetId, "Copy of Donor!A:F").execute();
+    	ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
     	List<List<Object>> values = response.getValues();
+
     	values = Arrays.asList(
     	        Arrays.asList(
-    	                "","DL"+values.size(),donor.getName(),donor.getContact(),donor.getEmail(),donor.getCity()
+    	                "","",donor.getName(),donor.getContact(),donor.getEmail(),donor.getCity()
     	        )
     	);
     	
@@ -70,8 +71,6 @@ public class ContibutorContoller {
     	                .setValueInputOption("USER_ENTERED")
     	                .execute();
     	Beneficiary beneficiary = getBeneficiary();
-    	System.out.println(env.getProperty("spring.mail.username"));
-    	
     	sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary);
     	
     }
