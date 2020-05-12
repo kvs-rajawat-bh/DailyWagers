@@ -61,7 +61,9 @@ public class ContibutorContoller {
     	Beneficiary beneficiary = getBeneficiary();
     	values = Arrays.asList(
     	        Arrays.asList(
-    	        		beneficiary.getName(),beneficiary.getContact(),beneficiary.getAddress(),"","DL"+values.size(),donor.getName(),donor.getContact(),donor.getEmail(),donor.getCity()
+    	        		beneficiary==null?"":beneficiary.getName(),beneficiary==null?"":beneficiary.getContact(),
+    	        				beneficiary==null?"":beneficiary.getAddress(),"","DL"+values.size(),donor.getName(),
+    	        				donor.getContact(),donor.getEmail(),donor.getCity()
     	        )
     	);
     	
