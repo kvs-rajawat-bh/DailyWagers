@@ -88,7 +88,7 @@ public class ContibutorContoller {
     	ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
     	List<List<Object>> values = response.getValues();
     	System.out.println(values.get(0).get(16));
-    	Beneficiary beneficiary = new Beneficiary();
+    	Beneficiary beneficiary = null;
     	
     	for(int i=0;i<values.size();i++) {
     		if(values.get(i).get(13).equals("TRUE") && values.get(i).get(16).equals("FALSE")) {
