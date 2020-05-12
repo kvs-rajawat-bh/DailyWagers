@@ -92,6 +92,7 @@ public class ContibutorContoller {
     	
     	for(int i=0;i<values.size();i++) {
     		if(values.get(i).get(13).equals("TRUE") && values.get(i).get(16).equals("FALSE")) {
+    			beneficiary = new Beneficiary();
     			beneficiary.setName(values.get(i).get(3).toString());
     			beneficiary.setContact(values.get(i).get(4).toString());
     			beneficiary.setAddress(values.get(i).get(5).toString());
