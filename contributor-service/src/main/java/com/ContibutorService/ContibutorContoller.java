@@ -105,7 +105,7 @@ public class ContibutorContoller {
     			Sheets.Spreadsheets.Values.Update request = service.spreadsheets().values().update(spreadsheetId, updateRange, body);
     			request.setValueInputOption("USER_ENTERED");
     			request.execute();
-    			updateRange = "Copy of Beneficiary Database!Q"+(i+2);
+    			updateRange = "Beneficiary Database!Q"+(i+2);
     			values = Arrays.asList(
     	    	        Arrays.asList(
     	    	                "TRUE"
