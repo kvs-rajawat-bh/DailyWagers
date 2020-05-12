@@ -72,7 +72,6 @@ public class ContibutorContoller {
     	        service.spreadsheets().values().append(spreadsheetId, range, body)
     	                .setValueInputOption("USER_ENTERED")
     	                .execute();
-    	System.out.println(beneficiary.getName());
     	sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary);
     	
     }
