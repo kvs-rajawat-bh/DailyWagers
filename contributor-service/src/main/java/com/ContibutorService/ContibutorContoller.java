@@ -72,8 +72,9 @@ public class ContibutorContoller {
     	        service.spreadsheets().values().append(spreadsheetId, range, body)
     	                .setValueInputOption("USER_ENTERED")
     	                .execute();
-    	sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary);
-    	
+    	if(beneficiary!=null) {
+    		sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary);
+    	}    	
     }
     
     public Beneficiary getBeneficiary() throws GeneralSecurityException, IOException {
