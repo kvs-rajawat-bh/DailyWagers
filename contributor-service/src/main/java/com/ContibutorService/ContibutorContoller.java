@@ -39,10 +39,7 @@ public class ContibutorContoller {
     
     @Autowired
     private Environment env;
-    
-    
-    @Autowired
-    private JavaMailSender mailSender;
+
     
     @Autowired
     private MailBuilder mailBuilder;
@@ -68,12 +65,11 @@ public class ContibutorContoller {
     	);
     	
     	ValueRange body = new ValueRange().setValues(values);
-//		AppendValuesResponse result =
     	        service.spreadsheets().values().append(spreadsheetId, range, body)
     	                .setValueInputOption("USER_ENTERED")
     	                .execute();
     	if(beneficiary!=null) {
-    		sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary);
+    		mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary);
     	}    	
     }
     
@@ -92,10 +88,7 @@ public class ContibutorContoller {
     	
     	for(int i=0;i<values.size();i++) {
     		if(values.get(i).get(13).equals("TRUE") && values.get(i).get(16).equals("FALSE")) {
-    			beneficiary = new Beneficiary();
-    			beneficiary.setName(values.get(i).get(3).toString());
-    			beneficiary.setContact(values.get(i).get(4).toString());
-    			beneficiary.setAddress(values.get(i).get(5).toString());
+    			beneficiary = new Beneficiary(values.get(i).get(3).toString(), values.get(i).get(4).toString(), values.get(i).get(5).toString());
     			updateRange+=""+(i+2);
     			values = Arrays.asList(
     	    	        Arrays.asList(
@@ -121,25 +114,5 @@ public class ContibutorContoller {
     	}
     	return beneficiary;
 		
-	}
-
-
-	public void sendMail(String from, String to, Beneficiary beneficiary) {
-    	MimeMessagePreparator messagePreparator = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom(from);
-            messageHelper.setTo(to);
-            messageHelper.setSubject("Thank You");
-            String content = mailBuilder.build(beneficiary);
-            messageHelper.setText(content, true);
-            
-        };
-        try {
-            mailSender.send(messagePreparator);
-        } catch (MailException e) {
-            System.out.println(e.getMessage());
-        }
     }
-    
-    
 }

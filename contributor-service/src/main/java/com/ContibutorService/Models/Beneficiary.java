@@ -5,6 +5,16 @@ public class Beneficiary {
 	private String name;
 	private String contact;
 	private String address;
+	
+	
+	
+	
+	public Beneficiary(String name, String contact, String address) {
+		super();
+		this.name = name;
+		this.contact = contact;
+		this.address = address;
+	}
 	public String getName() {
 		return name;
 	}

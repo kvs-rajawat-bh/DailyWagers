@@ -8,6 +8,17 @@ public class Donor {
 	private String email;
 	private String beneficiaryName;
 	private String beneficiaryContact;
+	
+	
+	
+	
+	public Donor(String name, String contact, String email, String city) {
+		super();
+		this.name = name;
+		this.contact = contact;
+		this.city = city;
+		this.email = email;
+	}
 	public String getName() {
 		name = name.substring(0, 1).toUpperCase() + name.substring(1);
 		return name;
