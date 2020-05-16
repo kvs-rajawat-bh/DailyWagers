@@ -90,11 +90,11 @@ public class ContibutorContoller {
     		if(values.get(i).get(13).equals("TRUE") && values.get(i).get(16).equals("FALSE")) {
     			beneficiary = new Beneficiary(values.get(i).get(3).toString(), values.get(i).get(4).toString(), values.get(i).get(5).toString());
     			updateRange+=""+(i+2);
-    			values = Arrays.asList(
-    	    	        Arrays.asList(
-    	    	                "FALSE"
-    	    	        )
-    	    	);
+//    			values = Arrays.asList(
+//    	    	        Arrays.asList(
+//    	    	                "FALSE"
+//    	    	        )
+//    	    	);
     			ValueRange body = new ValueRange().setValues(values);
     			Sheets.Spreadsheets.Values.Update request = service.spreadsheets().values().update(spreadsheetId, updateRange, body);
     			request.setValueInputOption("USER_ENTERED");
