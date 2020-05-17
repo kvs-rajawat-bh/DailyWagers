@@ -59,7 +59,7 @@ public class AutoDonorAssigner {
 			}
 			rowIndex++;
 		}
-
+		
 		range = "Beneficiary Database!A3:Q";
 		response = service.spreadsheets().values().get(spreadsheetId, range).execute();
 		List<List<Object>> allBeneficiary = response.getValues();
@@ -75,17 +75,16 @@ public class AutoDonorAssigner {
 			}
 			rowIndex++;
 		}
-
+	
 		if(validDonors.size()==0 || validBeneficiaries.size()==0) {
 			return;
 		}
 		
 		int i = 0;
-		
-		while(i < validBeneficiaries.size() && i<validDonors.size()) {
+	
+		while(i < Math.min(validBeneficiaries.size(), validDonors.size())) {
 			
 			//firstly mark beneficiary as assigned
-			
 			List<List<Object>> values = Arrays.asList(Arrays.asList("TRUE"));
 			String updateRange = "Beneficiary Database!Q" + validBeneficiaries.get(i).row;
 			ValueRange body = new ValueRange().setValues(values);
@@ -94,8 +93,6 @@ public class AutoDonorAssigner {
 			request.setValueInputOption("USER_ENTERED");
 			request.execute();
 			
-			
-			
 			values = Arrays.asList(
 	    	        Arrays.asList(
 	    	        		validBeneficiaries.get(i).beneficiary.getName(),
@@ -103,20 +100,21 @@ public class AutoDonorAssigner {
 	    	        		validBeneficiaries.get(i).beneficiary.getAddress()
 	    	        )
 	    	);
+			
 			updateRange = "Donor!A"+validDonors.get(i).row+":C";
 			
 			body = new ValueRange().setValues(values);
 			request = service.spreadsheets().values().update(spreadsheetId, updateRange, body);
 			request.setValueInputOption("USER_ENTERED");
 			request.execute();
-			
+		
 			mailBuilder.sendMail(env.getProperty("spring.mail.username"), validDonors.get(i).donor.getEmail(), 
 																		  validBeneficiaries.get(i).beneficiary);
 			i++;
 			
 		}
+		return;
 	}
-
 }
 
 class DonorInfo {

@@ -2,6 +2,7 @@ package com.ContibutorService;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -46,16 +47,18 @@ public class ContibutorContoller {
     
 	@PostMapping("/addDonor")
     public void addDonor(@RequestBody Donor donor) throws GeneralSecurityException, IOException {
+		
     	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-    	String range = "Donor!A:F";
+    	String range = "Donor!A:N";
     	
     	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
- 
     	ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
     	List<List<Object>> values = response.getValues();
+    	
     	Beneficiary beneficiary = getBeneficiary();
+    	
     	values = Arrays.asList(
     	        Arrays.asList(
     	        		beneficiary==null?"":beneficiary.getName(),beneficiary==null?"":beneficiary.getContact(),
@@ -63,11 +66,10 @@ public class ContibutorContoller {
     	        				donor.getContact(),donor.getEmail(),donor.getCity()
     	        )
     	);
-    	
     	ValueRange body = new ValueRange().setValues(values);
-    	        service.spreadsheets().values().append(spreadsheetId, range, body)
-    	                .setValueInputOption("USER_ENTERED")
-    	                .execute();
+    	service.spreadsheets().values().append(spreadsheetId, range, body)
+    						  .setValueInputOption("USER_ENTERED")
+    	                      .execute();
     	if(beneficiary!=null) {
     		mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary);
     	}    	
@@ -79,39 +81,37 @@ public class ContibutorContoller {
     								.setApplicationName(APPLICATION_NAME)
     								.build();
     	
-    	String range = "Beneficiary Database!A2:Q";
-    	String updateRange = "Beneficiary Database!N";
+    	String range = "Beneficiary Database!A3:Q";
     	ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
-    	List<List<Object>> values = response.getValues();
-    	System.out.println(values.get(0).get(16));
+    	List<List<Object>> allBeneficiary = response.getValues();
     	Beneficiary beneficiary = null;
+  
+    	List<BeneficiaryInfo> validBeneficiaries = new ArrayList<BeneficiaryInfo>();
+    	int rowIndex=0;
+		for(List<Object> list : allBeneficiary) {
+			if(list.get(13).equals("TRUE") && list.get(16).equals("FALSE")) {
+				validBeneficiaries.add(new BeneficiaryInfo(rowIndex+3, new Beneficiary(list.get(3).toString(),
+																   list.get(4).toString(), 
+																   list.get(5).toString())));
+			}
+			rowIndex++;
+		}
+		if(validBeneficiaries.size()==0) {
+			return null;
+		}
+    	beneficiary = validBeneficiaries.get(0).beneficiary;
+		List<List<Object>> assigned = Arrays.asList(
+    	        Arrays.asList(
+    	                "TRUE"
+    	        )
+    	);
+		
+    	String updateRange = "Beneficiary Database!Q"+validBeneficiaries.get(0).row;
+    	ValueRange body = new ValueRange().setValues(assigned);
+		Sheets.Spreadsheets.Values.Update request = service.spreadsheets().values().update(spreadsheetId, updateRange, body);
+		request.setValueInputOption("USER_ENTERED");
+		request.execute();
     	
-    	for(int i=0;i<values.size();i++) {
-    		if(values.get(i).get(13).equals("TRUE") && values.get(i).get(16).equals("FALSE")) {
-    			beneficiary = new Beneficiary(values.get(i).get(3).toString(), values.get(i).get(4).toString(), values.get(i).get(5).toString());
-    			updateRange+=""+(i+2);
-//    			values = Arrays.asList(
-//    	    	        Arrays.asList(
-//    	    	                "FALSE"
-//    	    	        )
-//    	    	);
-//    			ValueRange body = new ValueRange().setValues(values);
-//    			Sheets.Spreadsheets.Values.Update request = service.spreadsheets().values().update(spreadsheetId, updateRange, body);
-//    			request.setValueInputOption("USER_ENTERED");
-//    			request.execute();
-    			updateRange = "Beneficiary Database!Q"+(i+3);
-    			values = Arrays.asList(
-    	    	        Arrays.asList(
-    	    	                "TRUE"
-    	    	        )
-    	    	);
-    			ValueRange body = new ValueRange().setValues(values);
-    			Sheets.Spreadsheets.Values.Update request = service.spreadsheets().values().update(spreadsheetId, updateRange, body);
-    			request.setValueInputOption("USER_ENTERED");
-    			request.execute();
-    			break;
-    		}
-    	}
     	return beneficiary;
 		
     }
