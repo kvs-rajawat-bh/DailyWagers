@@ -1,4 +1,4 @@
-package com.ContibutorService.models;
+package com.ContibutorService.Models;
 
 public class Donor {
 	

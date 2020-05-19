@@ -1,9 +1,13 @@
 package com.ContibutorService;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ContibutorService.models.Beneficiary;
-import com.ContibutorService.models.Donor;
+import com.ContibutorService.Models.Beneficiary;
+import com.ContibutorService.Models.Donor;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -37,7 +41,33 @@ public class ContibutorContoller {
     private MailBuilder mailBuilder;
     
 	@PostMapping("/addDonor")
-    public void addDonor(@RequestBody Donor donor) throws GeneralSecurityException, IOException {
+    public void addDonor(@RequestBody Donor donor) throws GeneralSecurityException, IOException, InterruptedException {
+		
+		long start=0;
+		long end=0;
+		HttpURLConnection connection = null;
+		try {
+	        URL u = new URL("https://daily-wagers.herokuapp.com/");
+	        start = (new Date()).getTime();
+	        connection = (HttpURLConnection) u.openConnection();
+	        connection.setRequestMethod("GET");
+	        end = (new Date()).getTime();
+	        Thread.sleep(end-start);
+
+	        } 
+		catch (MalformedURLException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    	}
+		catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    	} 
+		finally {
+	        if (connection != null) {
+	            connection.disconnect();
+	        }
+		}	
 		
     	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     	String range = "Donor!A:N";

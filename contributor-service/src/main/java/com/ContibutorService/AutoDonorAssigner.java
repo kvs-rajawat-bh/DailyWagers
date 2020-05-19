@@ -10,11 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ContibutorService.models.Beneficiary;
-import com.ContibutorService.models.Donor;
+import com.ContibutorService.Models.Beneficiary;
+import com.ContibutorService.Models.Donor;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -107,7 +106,8 @@ public class AutoDonorAssigner {
 			request = service.spreadsheets().values().update(spreadsheetId, updateRange, body);
 			request.setValueInputOption("USER_ENTERED");
 			request.execute();
-		
+			
+			//high risk code area for test
 			mailBuilder.sendMail(env.getProperty("spring.mail.username"), validDonors.get(i).donor.getEmail(), 
 																		  validBeneficiaries.get(i).beneficiary);
 			i++;

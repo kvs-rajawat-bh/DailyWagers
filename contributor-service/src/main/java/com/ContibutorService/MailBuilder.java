@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import com.ContibutorService.models.Beneficiary;
+import com.ContibutorService.Models.Beneficiary;
 
 @Service
 public class MailBuilder {
