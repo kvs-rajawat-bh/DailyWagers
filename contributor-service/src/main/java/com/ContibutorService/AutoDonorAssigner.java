@@ -38,7 +38,6 @@ public class AutoDonorAssigner {
 	@Scheduled(fixedRate = 3600000)
 	
 	public void syncDonorBeneficiary() throws GeneralSecurityException, IOException, InterruptedException {
-		System.out.println("called");
 
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 		String range = "Donor!A3:N";
@@ -70,7 +69,8 @@ public class AutoDonorAssigner {
 			if(list.get(13).equals("TRUE") && list.get(16).equals("FALSE")) {
 				validBeneficiaries.add(new BeneficiaryInfo(rowIndex+3, new Beneficiary(list.get(3).toString(),
 																   list.get(4).toString(), 
-																   list.get(5).toString())));
+																   list.get(5).toString(), list.get(6).toString(),
+																   list.get(7).toString())));
 			}
 			rowIndex++;
 		}
@@ -109,11 +109,10 @@ public class AutoDonorAssigner {
 			
 			//high risk code area for test
 			mailBuilder.sendMail(env.getProperty("spring.mail.username"), validDonors.get(i).donor.getEmail(), 
-																		  validBeneficiaries.get(i).beneficiary);
+																		  validBeneficiaries.get(i).beneficiary, validDonors.get(i).donor);
 			i++;
 			
 		}
-		return;
 	}
 }
 

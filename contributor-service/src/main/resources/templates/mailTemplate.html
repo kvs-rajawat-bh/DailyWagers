@@ -1,38 +1,87 @@
-<h1>Greetings!</h1>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+</head>
 
-<h3>Firstly, thank you very much for signing up to donate in these times of uncertainty. Your contribution graciously helping an individual at a shelter camp in Mumbai. We wish you and your family the best of health and safety!</h3>
-<br/>
-<h4>Here is the address of the individual allotted to you:</h4>
+<body>
+	<h1>Greetings!</h1>
 
-<label><b>Name : <span th:text="${beneficiary.getName()}"></span> </b></label><br/>
-<label><b>Contact Number: <span th:text="${beneficiary.getContact()}"></span></b></label><br/>
-<label><b>Address: <span th:text="${beneficiary.getAddress()}"></span></b></label><br/>
+	<h3>Firstly, thank you very much for signing up to donate in these
+		times of uncertainty. Your contribution graciously helping an
+		individual in need. We wish you and your family the best of health and
+		safety!</h3>
+	<br />
+	<h4>Here is the address of the individual allotted to you:</h4>
 
-<h3><b>PLEASE MAKE SURE YOU ENTER THESE DETAILS AT THE CHECK OUT FOR THE DELIVERY PARTNER TO BE ABLE TO COORDINATE WITH THE BENEFICIARY</b></h3>
+	<label><b>Name : <span th:text="${beneficiary.getName()}"></span>
+	</b></label>
+	<br />
+	<label><b>Contact Number: <span
+			th:text="${beneficiary.getContact()}"></span></b></label>
+	<br />
+	<label><b>Address: <span
+			th:text="${beneficiary.getAddress()}"></span></b></label>
+	<br />
+
+	<h3>
+		<b>PLEASE MAKE SURE YOU ENTER THESE DETAILS AT THE CHECK OUT FOR
+			THE DELIVERY PARTNER TO BE ABLE TO COORDINATE WITH THE BENEFICIARY</b>
+	</h3>
 
 
-<h3>These details were furnished to us by a daily worker working with us, living in the same shelter.</h3>
+	<h3>These details were furnished to us by the person whose contact
+		details are given below :</h3>
 
-<h4>We highly recommend you to order the minimum essential items as we suggest below:</h4>
-<ul>
-	<li>2 kg x Rice</li>
-	<li>2 kg x Potatoes</li>
-	<li>1kg x  Dal</li>
-	<li>1 packet salt</li>
+	<label><b>Name : <span th:text="${beneficiary.getPoc()}"></span>
+	</b></label>
+	<br />
+	<label><b>Contact Number: <span
+			th:text="${beneficiary.getPocContact()}"></span></b></label>
+	<br />
 
-</ul>
+	<h3>
+		<b>IN CASE ANY ISSUES COME UP AT THE TIME OF DELIVERY, PLEASE
+			CONTACT ABOVE MENTIONED PERSON.</b>
+	</h3>
 
-<span>You can use any of the apps/website as given below to order groceries:</span><br/>
-<a href="https://grofers.com">https://grofers.com/</a><br/>
-<a href="https://bigbasket.com">https://www.bigbasket.com/</a>
+	<h4>We highly recommend you to order the minimum essential items
+		as we suggest below:</h4>
+	<ul>
+		<li>2 kg x Rice</li>
+		<li>2 kg x Potatoes</li>
+		<li>1 kg x Dal</li>
+		<li>1 packet salt</li>
 
-<h3><b>PLEASE MAKE SURE NOT TO CHOOSE THE COD OPTION AT CHECKOUT</b></h3><br/>
+	</ul>
 
-<span>Once you are done ordering, we request you to kindly email a screenshot of the purchase back on this mail. This is done so we can confirm that every address receives a package.</span>
+	<span>You can use any of the apps/website as given below to
+		order groceries:</span>
+	<br />
+	<a href="https://amazon.in">https://amazon.in/ (Most Recommended
+		option)</a>
+	<br />
+	<a href="https://grofers.com">https://grofers.com/</a>
+	<br />
+	<a href="https://bigbasket.com">https://www.bigbasket.com/</a>
 
-<span>Once again, we would like to thank you on behalf of all the Daily Wagers and the team of ForDailyWagers</span><br/>
-<br/>
-<span><b>Stay home!</b></span><br/>
-<span><b>Stay safe!</b></span>
+	<h3>
+		<b>PLEASE MAKE SURE NOT TO CHOOSE THE COD OPTION AT CHECKOUT</b>
+	</h3>
+	<br />
 
+	<span>Once you are done ordering, we request you to kindly email
+		a screenshot of the purchase back on this mail. This is done so we can
+		confirm that every address receives a package.</span>
+
+	<span>Once again, we would like to thank you on behalf of all
+		the Daily Wagers and the team of ForDailyWagers</span>
+	<br />
+	<br />
+	<span><b>Stay home!</b></span>
+	<br />
+	<span><b>Stay safe!</b></span>
+
+</body>
+</html>
 

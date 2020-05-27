@@ -52,6 +52,7 @@ public class ContibutorContoller {
 	        connection = (HttpURLConnection) u.openConnection();
 	        connection.setRequestMethod("GET");
 	        end = (new Date()).getTime();
+	        System.out.println(end-start);
 	        Thread.sleep(end-start);
 
 	        } 
@@ -92,7 +93,7 @@ public class ContibutorContoller {
     						  .setValueInputOption("USER_ENTERED")
     	                      .execute();
     	if(beneficiary!=null) {
-    		mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary);
+    		mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary, null);
     	}    	
     }
     
@@ -113,7 +114,8 @@ public class ContibutorContoller {
 			if(list.get(13).equals("TRUE") && list.get(16).equals("FALSE")) {
 				validBeneficiaries.add(new BeneficiaryInfo(rowIndex+3, new Beneficiary(list.get(3).toString(),
 																   list.get(4).toString(), 
-																   list.get(5).toString())));
+																   list.get(5).toString(), list.get(6).toString(),
+																   list.get(7).toString())));
 			}
 			rowIndex++;
 		}

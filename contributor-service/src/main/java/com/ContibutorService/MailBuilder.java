@@ -10,6 +10,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.ContibutorService.Models.Beneficiary;
+import com.ContibutorService.Models.Donor;
 
 @Service
 public class MailBuilder {
@@ -24,21 +25,27 @@ public class MailBuilder {
         this.templateEngine = templateEngine;
     }
  
-    public String build(Beneficiary beneficiary) {
-    	System.out.println(beneficiary.getName());
+    public String build(Beneficiary beneficiary, Donor donor) {
         Context context = new Context();
-        context.setVariable("beneficiary", beneficiary);
-        return templateEngine.process("mailTemplate", context);
+        if(beneficiary==null) {
+        	context.setVariable("donor", donor);
+        	return templateEngine.process("afterDelivery", context);
+        }
+        else {
+        	context.setVariable("beneficiary", beneficiary);
+            return templateEngine.process("mailTemplate", context);
+        }
+        
     }
     
 
-	public void sendMail(String from, String to, Beneficiary beneficiary) {
+	public void sendMail(String from, String to, Beneficiary beneficiary, Donor donor) {
     	MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(from);
             messageHelper.setTo(to);
             messageHelper.setSubject("Thank You");
-            String content = build(beneficiary);
+            String content = build(beneficiary, donor);
             messageHelper.setText(content, true);
             
         };

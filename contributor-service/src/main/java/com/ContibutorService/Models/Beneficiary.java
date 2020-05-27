@@ -6,14 +6,16 @@ public class Beneficiary {
 	private String contact;
 	private String address;
 	
+	private String poc;
+	private String pocContact;
 	
-	
-	
-	public Beneficiary(String name, String contact, String address) {
+	public Beneficiary(String name, String contact, String address, String poc, String pocContact) {
 		super();
 		this.name = name;
 		this.contact = contact;
 		this.address = address;
+		this.poc = poc;
+		this.pocContact = pocContact;
 	}
 	public String getName() {
 		return name;
@@ -32,6 +34,18 @@ public class Beneficiary {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public String getPoc() {
+		return poc;
+	}
+	public void setPoc(String poc) {
+		this.poc = poc;
+	}
+	public String getPocContact() {
+		return pocContact;
+	}
+	public void setPocContact(String pocContact) {
+		this.pocContact = pocContact;
 	}
 	
 	
