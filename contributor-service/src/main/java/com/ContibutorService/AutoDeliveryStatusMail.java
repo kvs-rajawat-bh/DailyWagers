@@ -33,7 +33,6 @@ public class AutoDeliveryStatusMail {
 	private Environment env;
 	
 	@Scheduled(cron="0 1 1 * * *")
-	@GetMapping("/autoDelivery")
 	public void autoDeliveryMail() throws GeneralSecurityException, IOException {
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
