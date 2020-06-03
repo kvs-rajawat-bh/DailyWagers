@@ -22,23 +22,25 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 
 @CrossOrigin("*")
 @Controller
-public class AutoDeliveryStatusMail {
+public class FollowUpMail {
+	
+	@Autowired
+	private UpdateSheet sheetUpdate;
 	
 	private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	private final String spreadsheetId = "1sR8mzuk0f9uSf8GL4AU7niYiDSayDsvF4yVSR98AYF8";
 	
 	@Autowired
-    private MailBuilder mailBuilder;
-	
-	@Autowired
-	private UpdateSheet sheetUpdate;
-	
-	@Autowired
 	private Environment env;
 	
-	@Scheduled(cron="0 0 1 * * *")
-	public void autoDeliveryMail() throws GeneralSecurityException, IOException {
+	@Autowired
+	private MailBuilder mailBuilder;
+	
+	//every day at 2 p.m
+	
+	@Scheduled(cron = "0 0 14 * * *")
+	public void autoFollow() throws GeneralSecurityException, IOException {
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
     								.setApplicationName(APPLICATION_NAME)
@@ -50,7 +52,7 @@ public class AutoDeliveryStatusMail {
     	List<DonorInfo> validDonors = new ArrayList<DonorInfo>();
 		int rowIndex=0;
 		for(List<Object> list : allDonors) {
-			if(list.size()>=16 && (list.get(13).equals("Delivered") || list.get(13).equals("delivered")) && list.get(15).equals("FALSE")) {
+			if(list.size()>=16 && (list.get(13).toString().length()==0) && list.get(14).equals("FALSE")) {
 				validDonors.add(new DonorInfo(rowIndex+3, new Donor(list.get(5).toString(), list.get(6).toString(),
 					list.get(7).toString(), list.get(8).toString())));
 			}
@@ -66,9 +68,11 @@ public class AutoDeliveryStatusMail {
     	        )
     	);
 		for(DonorInfo donor : validDonors) {
-			mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.donor.getEmail(), null, donor.donor, false);
-			range = "Donor!P"+donor.row;
+			mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.donor.getEmail(), null, donor.donor, true);
+			range = "Donor!O"+donor.row;
 			sheetUpdate.update(values, range);
 		}
+		
 	}
+
 }

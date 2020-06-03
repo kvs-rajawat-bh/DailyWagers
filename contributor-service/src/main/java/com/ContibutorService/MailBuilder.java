@@ -25,9 +25,13 @@ public class MailBuilder {
         this.templateEngine = templateEngine;
     }
  
-    public String build(Beneficiary beneficiary, Donor donor) {
+    public String build(Beneficiary beneficiary, Donor donor, boolean isFollow) {
         Context context = new Context();
-        if(beneficiary==null) {
+        if(isFollow) {
+        	context.setVariable("donor", donor);
+        	return templateEngine.process("followUp", context);
+        }
+        else if(beneficiary==null) {
         	context.setVariable("donor", donor);
         	return templateEngine.process("afterDelivery", context);
         }
@@ -39,13 +43,13 @@ public class MailBuilder {
     }
     
 
-	public void sendMail(String from, String to, Beneficiary beneficiary, Donor donor) {
+	public void sendMail(String from, String to, Beneficiary beneficiary, Donor donor, boolean isFollow) {
     	MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(from);
             messageHelper.setTo(to);
             messageHelper.setSubject("Thank You");
-            String content = build(beneficiary, donor);
+            String content = build(beneficiary, donor, isFollow);
             messageHelper.setText(content, true);
             
         };

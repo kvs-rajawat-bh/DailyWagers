@@ -42,34 +42,6 @@ public class ContibutorContoller {
     
 	@PostMapping("/addDonor")
     public void addDonor(@RequestBody Donor donor) throws GeneralSecurityException, IOException, InterruptedException {
-		
-		long start=0;
-		long end=0;
-		HttpURLConnection connection = null;
-		try {
-	        URL u = new URL("https://daily-wagers.herokuapp.com/");
-	        start = (new Date()).getTime();
-	        connection = (HttpURLConnection) u.openConnection();
-	        connection.setRequestMethod("GET");
-	        end = (new Date()).getTime();
-	        System.out.println(end-start);
-	        Thread.sleep(end-start);
-
-	        } 
-		catch (MalformedURLException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-	    	}
-		catch (IOException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-	    	} 
-		finally {
-	        if (connection != null) {
-	            connection.disconnect();
-	        }
-		}	
-		
     	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     	String range = "Donor!A:N";
     	
@@ -93,7 +65,7 @@ public class ContibutorContoller {
     						  .setValueInputOption("USER_ENTERED")
     	                      .execute();
     	if(beneficiary!=null) {
-    		mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary, null);
+    		mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary, null, false);
     	}    	
     }
     

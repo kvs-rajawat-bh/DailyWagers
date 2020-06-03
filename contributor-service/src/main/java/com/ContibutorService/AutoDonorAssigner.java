@@ -9,8 +9,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.ContibutorService.Models.Beneficiary;
 import com.ContibutorService.Models.Donor;
@@ -22,7 +22,7 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 @CrossOrigin("*")
-@RestController
+@Controller
 public class AutoDonorAssigner {
 
 	private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
@@ -35,8 +35,7 @@ public class AutoDonorAssigner {
 	@Autowired
 	private Environment env;
 
-	@Scheduled(fixedRate = 3600000)
-	
+	@Scheduled(cron = "0 0 * * * *")
 	public void syncDonorBeneficiary() throws GeneralSecurityException, IOException, InterruptedException {
 
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -109,7 +108,7 @@ public class AutoDonorAssigner {
 			
 			//high risk code area for test
 			mailBuilder.sendMail(env.getProperty("spring.mail.username"), validDonors.get(i).donor.getEmail(), 
-																		  validBeneficiaries.get(i).beneficiary, validDonors.get(i).donor);
+																		  validBeneficiaries.get(i).beneficiary, validDonors.get(i).donor, false);
 			i++;
 			
 		}
