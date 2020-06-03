@@ -39,36 +39,36 @@ public class AutoDeliveryStatusMail {
 	
 	@Scheduled(cron="0 0 1 * * *")
 	public void autoDeliveryMail() throws GeneralSecurityException, IOException {
-		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-    	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
-    								.setApplicationName(APPLICATION_NAME)
-    								.build();
-    	
-    	String range = "Donor!A3:P";
-    	ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
-    	List<List<Object>> allDonors = response.getValues();
-    	List<DonorInfo> validDonors = new ArrayList<DonorInfo>();
-		int rowIndex=0;
-		for(List<Object> list : allDonors) {
-			if(list.size()>=16 && (list.get(13).equals("Delivered") || list.get(13).equals("delivered")) && list.get(15).equals("FALSE")) {
-				validDonors.add(new DonorInfo(rowIndex+3, new Donor(list.get(5).toString(), list.get(6).toString(),
-					list.get(7).toString(), list.get(8).toString())));
-			}
-			rowIndex++;
-		}
-		
-		if(validDonors.size()==0) {
-			return;
-		}
-		List<List<Object>> values = Arrays.asList(
-    	        Arrays.asList(
-    	                "TRUE"
-    	        )
-    	);
-		for(DonorInfo donor : validDonors) {
-			mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.donor.getEmail(), null, donor.donor, false);
-			range = "Donor!P"+donor.row;
-			sheetUpdate.update(values, range);
-		}
+//		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+//    	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
+//    								.setApplicationName(APPLICATION_NAME)
+//    								.build();
+//    	
+//    	String range = "Donor!A3:P";
+//    	ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
+//    	List<List<Object>> allDonors = response.getValues();
+//    	List<DonorInfo> validDonors = new ArrayList<DonorInfo>();
+//		int rowIndex=0;
+//		for(List<Object> list : allDonors) {
+//			if(list.size()>=16 && (list.get(13).equals("Delivered") || list.get(13).equals("delivered")) && list.get(15).equals("FALSE")) {
+//				validDonors.add(new DonorInfo(rowIndex+3, new Donor(list.get(5).toString(), list.get(6).toString(),
+//					list.get(7).toString(), list.get(8).toString())));
+//			}
+//			rowIndex++;
+//		}
+//		
+//		if(validDonors.size()==0) {
+//			return;
+//		}
+//		List<List<Object>> values = Arrays.asList(
+//    	        Arrays.asList(
+//    	                "TRUE"
+//    	        )
+//    	);
+//		for(DonorInfo donor : validDonors) {
+//			mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.donor.getEmail(), null, donor.donor, false);
+//			range = "Donor!P"+donor.row;
+//			sheetUpdate.update(values, range);
+//		}
 	}
 }

@@ -38,80 +38,80 @@ public class AutoDonorAssigner {
 	@Scheduled(cron = "0 0 * * * *")
 	public void syncDonorBeneficiary() throws GeneralSecurityException, IOException, InterruptedException {
 
-		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-		String range = "Donor!A3:N";
-
-		Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY,
-				GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT)).setApplicationName(APPLICATION_NAME).build();
-
-		ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
-		List<List<Object>> allDonors = response.getValues();
-
-		List<DonorInfo> validDonors = new ArrayList<DonorInfo>();
-		int rowIndex=0;
-		for(List<Object> list : allDonors) {
-			if(list.get(0).equals("") && list.get(1).equals("")	&& list.get(2).equals("")) {
-				validDonors.add(new DonorInfo(rowIndex+3, new Donor(list.get(5).toString(), list.get(6).toString(),
-					list.get(7).toString(), list.get(8).toString())));
-			}
-			rowIndex++;
-		}
-		
-		range = "Beneficiary Database!A3:Q";
-		response = service.spreadsheets().values().get(spreadsheetId, range).execute();
-		List<List<Object>> allBeneficiary = response.getValues();
-		
-		
-		List<BeneficiaryInfo> validBeneficiaries = new ArrayList<BeneficiaryInfo>();
-		rowIndex=0;
-		for(List<Object> list : allBeneficiary) {
-			if(list.get(13).equals("TRUE") && list.get(16).equals("FALSE")) {
-				validBeneficiaries.add(new BeneficiaryInfo(rowIndex+3, new Beneficiary(list.get(3).toString(),
-																   list.get(4).toString(), 
-																   list.get(5).toString(), list.get(6).toString(),
-																   list.get(7).toString())));
-			}
-			rowIndex++;
-		}
-	
-		if(validDonors.size()==0 || validBeneficiaries.size()==0) {
-			return;
-		}
-		
-		int i = 0;
-	
-		while(i < Math.min(validBeneficiaries.size(), validDonors.size())) {
-			
-			//firstly mark beneficiary as assigned
-			List<List<Object>> values = Arrays.asList(Arrays.asList("TRUE"));
-			String updateRange = "Beneficiary Database!Q" + validBeneficiaries.get(i).row;
-			ValueRange body = new ValueRange().setValues(values);
-			Sheets.Spreadsheets.Values.Update request = service.spreadsheets().values().update(spreadsheetId, updateRange,
-					body);
-			request.setValueInputOption("USER_ENTERED");
-			request.execute();
-			
-			values = Arrays.asList(
-	    	        Arrays.asList(
-	    	        		validBeneficiaries.get(i).beneficiary.getName(),
-	    	        		validBeneficiaries.get(i).beneficiary.getContact(),
-	    	        		validBeneficiaries.get(i).beneficiary.getAddress()
-	    	        )
-	    	);
-			
-			updateRange = "Donor!A"+validDonors.get(i).row+":C";
-			
-			body = new ValueRange().setValues(values);
-			request = service.spreadsheets().values().update(spreadsheetId, updateRange, body);
-			request.setValueInputOption("USER_ENTERED");
-			request.execute();
-			
-			//high risk code area for test
-			mailBuilder.sendMail(env.getProperty("spring.mail.username"), validDonors.get(i).donor.getEmail(), 
-																		  validBeneficiaries.get(i).beneficiary, validDonors.get(i).donor, false);
-			i++;
-			
-		}
+//		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+//		String range = "Donor!A3:N";
+//
+//		Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY,
+//				GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT)).setApplicationName(APPLICATION_NAME).build();
+//
+//		ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
+//		List<List<Object>> allDonors = response.getValues();
+//
+//		List<DonorInfo> validDonors = new ArrayList<DonorInfo>();
+//		int rowIndex=0;
+//		for(List<Object> list : allDonors) {
+//			if(list.get(0).equals("") && list.get(1).equals("")	&& list.get(2).equals("")) {
+//				validDonors.add(new DonorInfo(rowIndex+3, new Donor(list.get(5).toString(), list.get(6).toString(),
+//					list.get(7).toString(), list.get(8).toString())));
+//			}
+//			rowIndex++;
+//		}
+//		
+//		range = "Beneficiary Database!A3:Q";
+//		response = service.spreadsheets().values().get(spreadsheetId, range).execute();
+//		List<List<Object>> allBeneficiary = response.getValues();
+//		
+//		
+//		List<BeneficiaryInfo> validBeneficiaries = new ArrayList<BeneficiaryInfo>();
+//		rowIndex=0;
+//		for(List<Object> list : allBeneficiary) {
+//			if(list.get(13).equals("TRUE") && list.get(16).equals("FALSE")) {
+//				validBeneficiaries.add(new BeneficiaryInfo(rowIndex+3, new Beneficiary(list.get(3).toString(),
+//																   list.get(4).toString(), 
+//																   list.get(5).toString(), list.get(6).toString(),
+//																   list.get(7).toString())));
+//			}
+//			rowIndex++;
+//		}
+//	
+//		if(validDonors.size()==0 || validBeneficiaries.size()==0) {
+//			return;
+//		}
+//		
+//		int i = 0;
+//	
+//		while(i < Math.min(validBeneficiaries.size(), validDonors.size())) {
+//			
+//			//firstly mark beneficiary as assigned
+//			List<List<Object>> values = Arrays.asList(Arrays.asList("TRUE"));
+//			String updateRange = "Beneficiary Database!Q" + validBeneficiaries.get(i).row;
+//			ValueRange body = new ValueRange().setValues(values);
+//			Sheets.Spreadsheets.Values.Update request = service.spreadsheets().values().update(spreadsheetId, updateRange,
+//					body);
+//			request.setValueInputOption("USER_ENTERED");
+//			request.execute();
+//			
+//			values = Arrays.asList(
+//	    	        Arrays.asList(
+//	    	        		validBeneficiaries.get(i).beneficiary.getName(),
+//	    	        		validBeneficiaries.get(i).beneficiary.getContact(),
+//	    	        		validBeneficiaries.get(i).beneficiary.getAddress()
+//	    	        )
+//	    	);
+//			
+//			updateRange = "Donor!A"+validDonors.get(i).row+":C";
+//			
+//			body = new ValueRange().setValues(values);
+//			request = service.spreadsheets().values().update(spreadsheetId, updateRange, body);
+//			request.setValueInputOption("USER_ENTERED");
+//			request.execute();
+//			
+//			//high risk code area for test
+//			mailBuilder.sendMail(env.getProperty("spring.mail.username"), validDonors.get(i).donor.getEmail(), 
+//																		  validBeneficiaries.get(i).beneficiary, validDonors.get(i).donor, false);
+//			i++;
+//			
+//		}
 	}
 }
 

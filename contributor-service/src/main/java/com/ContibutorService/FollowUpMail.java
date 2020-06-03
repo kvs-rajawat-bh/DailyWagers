@@ -11,6 +11,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.ContibutorService.Models.Donor;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -52,12 +53,17 @@ public class FollowUpMail {
     	List<DonorInfo> validDonors = new ArrayList<DonorInfo>();
 		int rowIndex=0;
 		for(List<Object> list : allDonors) {
-			if(list.size()>=16 && (list.get(13).toString().length()==0) && list.get(14).equals("FALSE")) {
+			if(list.size()>=16 && (list.get(13).toString().length()==0) 
+							   && list.get(14).equals("FALSE") 
+							   && (list.get(0).toString().length()>0)) 
+			{
+				
 				validDonors.add(new DonorInfo(rowIndex+3, new Donor(list.get(5).toString(), list.get(6).toString(),
 					list.get(7).toString(), list.get(8).toString())));
 			}
 			rowIndex++;
 		}
+		System.out.println(validDonors.size());
 		
 		if(validDonors.size()==0) {
 			return;
