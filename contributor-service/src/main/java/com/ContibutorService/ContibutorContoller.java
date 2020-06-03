@@ -43,14 +43,13 @@ public class ContibutorContoller {
 	@PostMapping("/addDonor")
     public void addDonor(@RequestBody Donor donor) throws GeneralSecurityException, IOException, InterruptedException {
     	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-    	String range = "Donor!A:N";
+    	String range = "Donor!A:V";
     	
     	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     	ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
     	List<List<Object>> values = response.getValues();
-    	
     	Beneficiary beneficiary = getBeneficiary();
     	
     	values = Arrays.asList(
@@ -63,7 +62,8 @@ public class ContibutorContoller {
     	ValueRange body = new ValueRange().setValues(values);
     	service.spreadsheets().values().append(spreadsheetId, range, body)
     						  .setValueInputOption("USER_ENTERED")
-    	                      .execute();
+    						  .setInsertDataOption("INSERT_ROWS")
+    						  .execute();
     	if(beneficiary!=null) {
     		mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary, null, false);
     	}    	
@@ -78,12 +78,13 @@ public class ContibutorContoller {
     	String range = "Beneficiary Database!A3:Q";
     	ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
     	List<List<Object>> allBeneficiary = response.getValues();
+    	
     	Beneficiary beneficiary = null;
   
     	List<BeneficiaryInfo> validBeneficiaries = new ArrayList<BeneficiaryInfo>();
     	int rowIndex=0;
 		for(List<Object> list : allBeneficiary) {
-			if(list.get(13).equals("TRUE") && list.get(16).equals("FALSE")) {
+			if(list.size()>=16 && list.get(13).equals("TRUE") && list.get(16).equals("FALSE")) {
 				validBeneficiaries.add(new BeneficiaryInfo(rowIndex+3, new Beneficiary(list.get(3).toString(),
 																   list.get(4).toString(), 
 																   list.get(5).toString(), list.get(6).toString(),
