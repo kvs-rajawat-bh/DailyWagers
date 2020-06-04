@@ -35,7 +35,7 @@ public class AutoDonorAssigner {
 	@Autowired
 	private Environment env;
 
-	@Scheduled(cron = "0 0 * * * *")
+	@Scheduled(fixedRate = 3600000)
 	public void syncDonorBeneficiary() throws GeneralSecurityException, IOException, InterruptedException {
 
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
