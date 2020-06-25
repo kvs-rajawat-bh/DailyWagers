@@ -9,13 +9,18 @@ public class Beneficiary {
 	private String poc;
 	private String pocContact;
 	
-	public Beneficiary(String name, String contact, String address, String poc, String pocContact) {
+	private String deliveryOption;
+	private String handler;
+	
+	public Beneficiary(String name, String contact, String address, String poc, String pocContact, String deliveryOption, String handler) {
 		super();
 		this.name = name;
 		this.contact = contact;
 		this.address = address;
 		this.poc = poc;
 		this.pocContact = pocContact;
+		this.deliveryOption = deliveryOption;
+		this.handler = handler;
 	}
 	public String getName() {
 		return name;
@@ -47,6 +52,19 @@ public class Beneficiary {
 	public void setPocContact(String pocContact) {
 		this.pocContact = pocContact;
 	}
+	public String getDeliveryOption() {
+		return deliveryOption;
+	}
+	public void setDeliveryOption(String deliveryOption) {
+		this.deliveryOption = deliveryOption;
+	}
+	public String getHandler() {
+		return handler;
+	}
+	public void setHandler(String handler) {
+		this.handler = handler;
+	}
+	
 	
 	
 

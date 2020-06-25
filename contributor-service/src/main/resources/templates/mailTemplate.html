@@ -55,15 +55,11 @@
 
 	</ul>
 
-	<span>You can use any of the apps/website as given below to
+	<span>You can use the app/website as given below to
 		order groceries:</span>
 	<br />
-	<a href="https://amazon.in">https://amazon.in/ (Most Recommended
-		option)</a>
-	<br />
-	<a href="https://grofers.com">https://grofers.com/</a>
-	<br />
-	<a href="https://bigbasket.com">https://www.bigbasket.com/</a>
+	<a th:href="${beneficiary.getDeliveryOption()}" th:text="${beneficiary.getDeliveryOption()}"></a>
+
 
 	<h3>
 		<b>PLEASE MAKE SURE NOT TO CHOOSE THE COD OPTION AT CHECKOUT</b>
@@ -78,6 +74,13 @@
 		the Daily Wagers and the team of ForDailyWagers</span>
 	<br />
 	<br />
+	
+	If you wish to reach out to us contact :  <span
+			th:text="${beneficiary.getHandler()}"></span></b></label>
+	<br />
+	
+	
+	
 	<span><b>Stay home!</b></span>
 	<br />
 	<span><b>Stay safe!</b></span>

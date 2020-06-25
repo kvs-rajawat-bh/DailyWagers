@@ -65,11 +65,13 @@ public class AutoDonorAssigner {
 		List<BeneficiaryInfo> validBeneficiaries = new ArrayList<BeneficiaryInfo>();
 		rowIndex=0;
 		for(List<Object> list : allBeneficiary) {
-			if(list.size()>16 && list.get(13).equals("TRUE") && list.get(16).equals("FALSE")) {
+			if(list.size()>18 && list.get(13).equals("TRUE") && list.get(16).equals("FALSE")) {
 				validBeneficiaries.add(new BeneficiaryInfo(rowIndex+3, new Beneficiary(list.get(3).toString(),
 																   list.get(4).toString(), 
 																   list.get(5).toString(), list.get(6).toString(),
-																   list.get(7).toString())));
+																   list.get(7).toString(),
+																   list.get(17).toString(),
+											   					   list.get(18).toString())));
 			}
 			rowIndex++;
 		}
