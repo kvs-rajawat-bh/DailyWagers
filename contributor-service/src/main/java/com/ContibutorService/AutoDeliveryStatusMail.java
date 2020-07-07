@@ -67,9 +67,16 @@ public class AutoDeliveryStatusMail {
     	        )
     	);
 		for(DonorInfo donor : validDonors) {
-			mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.donor.getEmail(), null, donor.donor, false);
-			range = "Donor!P"+donor.row;
-			sheetUpdate.update(values, range);
+			try{
+				mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.donor.getEmail(), null, donor.donor, false);
+				Thread.sleep(3000);
+				range = "Donor!P"+donor.row;
+				sheetUpdate.update(values, range);
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+			
 		}
 	}
 }
