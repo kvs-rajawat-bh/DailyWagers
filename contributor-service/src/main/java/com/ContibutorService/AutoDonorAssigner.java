@@ -37,7 +37,7 @@ public class AutoDonorAssigner {
 
 	@Scheduled(fixedDelay = 3600000)
 	public void syncDonorBeneficiary() throws GeneralSecurityException, IOException, InterruptedException {
-
+		System.out.println("Auto Assign Donor");
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 		String range = "Donor!A3:N";
 

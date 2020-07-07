@@ -43,7 +43,7 @@ public class ContibutorContoller {
 	@PostMapping("/addDonor")
     public void addDonor(@RequestBody Donor donor) throws GeneralSecurityException, IOException, InterruptedException {
     	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-    	String range = "Donor!A:V";
+    	String range = "Donor!A:P";
     	
     	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)

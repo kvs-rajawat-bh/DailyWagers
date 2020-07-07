@@ -37,8 +37,9 @@ public class AutoDeliveryStatusMail {
 	@Autowired
 	private Environment env;
 	
-	@Scheduled(cron="0 0 1 * * *")
+	@Scheduled(cron="0 0 * * * *")
 	public void autoDeliveryMail() throws GeneralSecurityException, IOException {
+		System.out.println("Auto Delivery mail starting");
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     	Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
     								.setApplicationName(APPLICATION_NAME)
