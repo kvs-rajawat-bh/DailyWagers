@@ -69,7 +69,7 @@ public class AutoDeliveryStatusMail {
 		for(DonorInfo donor : validDonors) {
 			try{
 				mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.donor.getEmail(), null, donor.donor, false);
-				Thread.sleep(3000);
+				Thread.sleep(10000);
 				range = "Donor!P"+donor.row;
 				sheetUpdate.update(values, range);
 			}
