@@ -74,9 +74,17 @@ public class FollowUpMail {
     	        )
     	);
 		for(DonorInfo donor : validDonors) {
-			mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.donor.getEmail(), null, donor.donor, true);
-			range = "Donor!O"+donor.row;
-			sheetUpdate.update(values, range);
+			try{
+				mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.donor.getEmail(), null, donor.donor, true);
+				Thread.sleep(10000);
+				range = "Donor!O"+donor.row;
+				sheetUpdate.update(values, range);
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+				break;
+			}
+			
 		}
 		
 	}

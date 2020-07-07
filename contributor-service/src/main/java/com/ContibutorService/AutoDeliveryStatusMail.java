@@ -75,6 +75,7 @@ public class AutoDeliveryStatusMail {
 			}
 			catch(Exception e) {
 				System.out.println(e.getMessage());
+				break;
 			}
 			
 		}
