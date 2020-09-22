@@ -67,7 +67,41 @@ public class ContibutorContoller {
     	if(beneficiary!=null) {
     		mailBuilder.sendMail(env.getProperty("spring.mail.username"), donor.getEmail(), beneficiary, null, false);
     	}    	
-    }
+	}
+	
+
+	 ///////////////////////////////////////Insurance///////////////////////////////////////////////
+
+	 @PostMapping("/addInsurance")
+	 public void addInsurance(@RequestBody Insurance insurance) throws GeneralSecurityException, IOException, InterruptedException {
+		 final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+		 String range = "Insurance!A:G";
+		 
+		 Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, GoogleAuthorizeUtil.getCredentials(HTTP_TRANSPORT))
+				 .setApplicationName(APPLICATION_NAME)
+				 .build();
+		 ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
+		 List<List<Object>> values = response.getValues();
+		 
+		 
+		 values = Arrays.asList(
+		         Arrays.asList(
+		         		insurance.getName(), insurance.getEmail(), insurance.getContact(), insurance.getCity()
+		         )
+		 );
+		 ValueRange body = new ValueRange().setValues(values);
+		 service.spreadsheets().values().append(spreadsheetId, range, body)
+							   .setValueInputOption("USER_ENTERED")
+							   .setInsertDataOption("INSERT_ROWS")
+							   .execute();
+	 	
+	  }
+
+
+
+
+
+	 //////////////////////////////////////Insurance/////////////////////////////////////////////////
     
     public Beneficiary getBeneficiary() throws GeneralSecurityException, IOException {
     	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
